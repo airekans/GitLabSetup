@@ -1,5 +1,6 @@
 #! /bin/sh
 
+# Refer to http://dlaxar.blogspot.co.at/2012/06/installing-gitlab-with-gitolite-on.html
 ## Please run the following command as root
 rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
