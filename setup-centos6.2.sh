@@ -70,3 +70,7 @@ sudo -u gitlab -H git clone git@localhost:gitolite-admin.git /tmp/gitolite-admin
 
 # If it succeeded without errors you can remove the cloned repo
 sudo rm -rf /tmp/gitolite-admin
+
+
+#### Data settings
+#### Please refer to doc/install/databases.md in GitLab.
