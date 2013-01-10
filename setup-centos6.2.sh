@@ -16,3 +16,20 @@ cd ruby-1.9.3-p0
 ./configure --enable-shared --disable-pthread
 
 make && make install
+
+# If you cannot locate gem, use "whereis gem" to find out it location
+gem update --system
+gem update
+gem install bundler
+gem install rails
+
+# Add users git and gitlab
+adduser --system --shell /bin/sh -c 'Git Version Control' --home /data/git git
+mkdir -p /data/git
+chown git:git /data/git
+
+adduser -c 'GitLab' --home /data/git gitlab
+mkdir -p /data/gitlab
+chown gitlab:gitlab /data/gitlab
+
+
