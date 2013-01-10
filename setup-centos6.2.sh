@@ -74,3 +74,37 @@ sudo rm -rf /tmp/gitolite-admin
 
 #### Data settings
 #### Please refer to doc/install/databases.md in GitLab.
+
+#### GitLab settings
+# We'll install GitLab into home directory of the user "gitlab"
+cd /data/gitlab
+
+# Clone GitLab repository
+sudo -u gitlab -H git clone https://github.com/gitlabhq/gitlabhq.git gitlab
+
+# Go to gitlab dir 
+cd /data/gitlab/gitlab
+
+# Checkout to stable release
+sudo -u gitlab -H git checkout 4-0-stable
+
+### Configure it
+cd /home/gitlab/gitlab
+
+# Copy the example GitLab config
+sudo -u gitlab -H cp config/gitlab.yml.example config/gitlab.yml
+
+# Make sure to change "localhost" to the fully-qualified domain name of your
+# host serving GitLab where necessary
+## remember to change the port number, repos_path and hooks_path
+sudo -u gitlab -H vim config/gitlab.yml
+
+# Make sure GitLab can write to the log/ and tmp/ directories
+sudo chown -R gitlab log/
+sudo chown -R gitlab tmp/
+sudo chmod -R u+rwX  log/
+sudo chmod -R u+rwX  tmp/
+
+# Copy the example Unicorn config
+# Remember to change the app_dir
+sudo -u gitlab -H cp config/unicorn.rb.example config/unicorn.rb
