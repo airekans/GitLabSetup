@@ -1,6 +1,7 @@
 #! /bin/sh
 
 ## Please run the following command as root
+rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
 yum -y install readline readline-devel ncurses-devel gdbm-devel glibc-devel tcl-devel openssl-devel curl-devel expat-devel db4-devel byacc gitolite sqlite-devel gcc-c++ libyaml libyaml-devel libffi libffi-devel libxml2 libxml2-devel libxslt libxslt-devel libicu libicu-devel system-config-firewall-tui python-devel redis
 
@@ -97,6 +98,7 @@ sudo -u gitlab -H cp config/gitlab.yml.example config/gitlab.yml
 # Make sure to change "localhost" to the fully-qualified domain name of your
 # host serving GitLab where necessary
 ## remember to change the port number, repos_path and hooks_path
+#### TODO: sed command to change the file directly.
 sudo -u gitlab -H vim config/gitlab.yml
 
 # Make sure GitLab can write to the log/ and tmp/ directories
@@ -107,4 +109,61 @@ sudo chmod -R u+rwX  tmp/
 
 # Copy the example Unicorn config
 # Remember to change the app_dir
+#### TODO: sed command to change the file directly.
 sudo -u gitlab -H cp config/unicorn.rb.example config/unicorn.rb
+sudo -u gitlab -H vim config/unicorn.rb
+
+# Mysql
+#### TODO: sed command to change the file directly.
+sudo -u gitlab cp config/database.yml.mysql config/database.yml
+sudo -u gitlab -H vim config/database.yml
+
+## Install Gems
+cd /data/gitlab/gitlab
+
+sudo gem install charlock_holmes --version '0.6.9'
+
+# For mysql db
+sudo -u gitlab -H bundle install --deployment --without development test postgres
+
+## Setup GitLab Hooks
+sudo cp ./lib/hooks/post-receive /home/git/.gitolite/hooks/common/post-receive
+sudo chown git:git /home/git/.gitolite/hooks/common/post-receive
+
+## Initialise Database and Activate Advanced Features
+sudo -u gitlab -H bundle exec rake gitlab:app:setup RAILS_ENV=production
+
+## Check Application Status
+sudo -u gitlab -H bundle exec rake gitlab:env:info RAILS_ENV=production
+# sudo -u gitlab -H bundle exec rake gitlab:check RAILS_ENV=production
+
+#### Install Init Script
+sudo wget https://raw.github.com/gitlabhq/gitlab-recipes/master/init.d/gitlab -P /etc/init.d/
+sudo chmod +x /etc/init.d/gitlab
+
+# Make GitLab start on boot:
+sudo chkconfig --add gitlab
+sudo chkconfig --level 2345 gitlab on
+
+## Start your GitLab instance:
+## start redis first
+sudo service redis start
+sudo service gitlab start
+
+# Check whether the installation is okay
+sudo -u gitlab -H bundle exec rake gitlab:check RAILS_ENV=production
+
+#### Install Nginx
+sudo yum install nginx
+
+# Site Configuration
+sudo mkdir -p /etc/nginx/sites-available/
+sudo wget https://raw.github.com/gitlabhq/gitlab-recipes/master/nginx/gitlab -P /etc/nginx/sites-available/
+sudo ln -s /etc/nginx/sites-available/gitlab /etc/nginx/conf.d/gitlab.conf
+
+# Change **YOUR_SERVER_IP** and **YOUR_SERVER_FQDN**
+# to the IP address and fully-qualified domain name
+# of your host serving GitLab
+sudo vim /etc/nginx/conf.d/gitlab.conf
+
+sudo /etc/init.d/nginx restart
