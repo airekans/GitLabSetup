@@ -128,7 +128,7 @@ sudo gem install charlock_holmes --version '0.6.9'
 sudo -u gitlab -H bundle install --deployment --without development test postgres
 
 ## Setup GitLab Hooks
-sudo cp ./lib/hooks/post-receive /home/git/.gitolite/hooks/common/post-receive
+sudo cp ./lib/hooks/post-receive /data/git/.gitolite/hooks/common/post-receive
 sudo chown git:git /home/git/.gitolite/hooks/common/post-receive
 
 ## Initialise Database and Activate Advanced Features
