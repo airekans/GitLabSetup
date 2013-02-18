@@ -129,7 +129,7 @@ sudo -u gitlab -H bundle install --deployment --without development test postgre
 
 ## Setup GitLab Hooks
 sudo cp ./lib/hooks/post-receive /data/git/.gitolite/hooks/common/post-receive
-sudo chown git:git /home/git/.gitolite/hooks/common/post-receive
+sudo chown git:git /data/git/.gitolite/hooks/common/post-receive
 
 ## Initialise Database and Activate Advanced Features
 sudo -u gitlab -H bundle exec rake gitlab:app:setup RAILS_ENV=production
