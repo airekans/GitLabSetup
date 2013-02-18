@@ -4,7 +4,7 @@
 ## Please run the following command as root
 rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
-yum -y install readline readline-devel ncurses-devel gdbm-devel glibc-devel tcl-devel openssl-devel curl-devel expat-devel db4-devel byacc gitolite sqlite-devel gcc-c++ libyaml libyaml-devel libffi libffi-devel libxml2 libxml2-devel libxslt libxslt-devel libicu libicu-devel system-config-firewall-tui python-devel redis
+yum -y install mysql-devel readline readline-devel ncurses-devel gdbm-devel glibc-devel tcl-devel openssl-devel curl-devel expat-devel db4-devel byacc gitolite sqlite-devel gcc-c++ libyaml libyaml-devel libffi libffi-devel libxml2 libxml2-devel libxslt libxslt-devel libicu libicu-devel system-config-firewall-tui python-devel redis
 
 cd
 mkdir -p tmp
@@ -91,7 +91,7 @@ cd /data/gitlab/gitlab
 sudo -u gitlab -H git checkout 4-0-stable
 
 ### Configure it
-cd /home/gitlab/gitlab
+cd /data/gitlab/gitlab
 
 # Copy the example GitLab config
 sudo -u gitlab -H cp config/gitlab.yml.example config/gitlab.yml
@@ -128,8 +128,8 @@ sudo gem install charlock_holmes --version '0.6.9'
 sudo -u gitlab -H bundle install --deployment --without development test postgres
 
 ## Setup GitLab Hooks
-sudo cp ./lib/hooks/post-receive /home/git/.gitolite/hooks/common/post-receive
-sudo chown git:git /home/git/.gitolite/hooks/common/post-receive
+sudo cp ./lib/hooks/post-receive /data/git/.gitolite/hooks/common/post-receive
+sudo chown git:git /data/git/.gitolite/hooks/common/post-receive
 
 ## Initialise Database and Activate Advanced Features
 sudo -u gitlab -H bundle exec rake gitlab:app:setup RAILS_ENV=production
