@@ -91,7 +91,7 @@ cd /data/gitlab/gitlab
 sudo -u gitlab -H git checkout 4-0-stable
 
 ### Configure it
-cd /home/gitlab/gitlab
+cd /data/gitlab/gitlab
 
 # Copy the example GitLab config
 sudo -u gitlab -H cp config/gitlab.yml.example config/gitlab.yml
